@@ -18,10 +18,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/principles/{principle}/quizzes', [PrincipleController::class, 'addQuiz'])->name('principles.addQuiz');
     
     // Lessons
-    Route::get('/lessons/create', [LessonController::class, 'create'])->name('lessons.create');
-    Route::post('/lessons', [LessonController::class, 'store'])->name('lessons.store');
+    Route::resource('lessons', LessonController::class)->only(['create', 'store', 'edit', 'update', 'destroy']);
     
     // Quizzes
-    Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
-    Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
+    Route::resource('quizzes', QuizController::class)->only(['create', 'store', 'destroy']);
 });

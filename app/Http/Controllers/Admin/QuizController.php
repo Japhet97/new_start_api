@@ -39,6 +39,13 @@ class QuizController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.principles.index')->with('success', 'Quiz added successfully.');
+        return redirect()->route('admin.principles.show', $validated['principle_id'])->with('success', 'Quiz added successfully.');
+    }
+
+    public function destroy(Quiz $quiz)
+    {
+        $principleId = $quiz->principle_id;
+        $quiz->delete();
+        return redirect()->route('admin.principles.show', $principleId)->with('success', 'Quiz deleted successfully.');
     }
 }
