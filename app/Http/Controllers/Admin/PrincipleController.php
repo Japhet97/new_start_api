@@ -29,9 +29,32 @@ class PrincipleController extends Controller
             'image' => 'nullable|string|max:255',
         ]);
 
-        Principle::create($validated);
+        $principle = Principle::create($validated);
 
-        return redirect()->route('admin.principles.index')->with('success', 'Principle created successfully.');
+        return redirect()->route('admin.principles.show', $principle)->with('success', 'Principle created successfully.');
+    }
+
+    public function edit(Principle $principle)
+    {
+        return view('admin.principles.edit', compact('principle'));
+    }
+
+    public function update(Request $request, Principle $principle)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'image' => 'nullable|string|max:255',
+        ]);
+
+        $principle->update($validated);
+
+        return redirect()->route('admin.principles.index')->with('success', 'Principle updated successfully.');
+    }
+
+    public function destroy(Principle $principle)
+    {
+        $principle->delete();
+        return redirect()->route('admin.principles.index')->with('success', 'Principle deleted successfully.');
     }
 
     public function show(Principle $principle)

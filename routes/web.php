@@ -11,10 +11,11 @@ Route::get('/', function () {
 
 Route::prefix('admin')->name('admin.')->group(function () {
     // Principles
-    Route::get('/principles', [PrincipleController::class, 'index'])->name('principles.index');
-    Route::get('/principles/create', [PrincipleController::class, 'create'])->name('principles.create');
-    Route::post('/principles', [PrincipleController::class, 'store'])->name('principles.store');
-    Route::get('/principles/{principle}', [PrincipleController::class, 'show'])->name('principles.show');
+    Route::resource('principles', PrincipleController::class);
+    
+    // Additional Principle Actions
+    Route::post('/principles/{principle}/lessons', [PrincipleController::class, 'addLesson'])->name('principles.addLesson');
+    Route::post('/principles/{principle}/quizzes', [PrincipleController::class, 'addQuiz'])->name('principles.addQuiz');
     
     // Lessons
     Route::get('/lessons/create', [LessonController::class, 'create'])->name('lessons.create');

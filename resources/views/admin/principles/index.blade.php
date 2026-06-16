@@ -4,53 +4,37 @@
 <div class="sm:flex sm:items-center sm:justify-between mb-8">
     <div>
         <h1 class="text-3xl font-bold text-slate-900">Health Principles</h1>
-        <p class="mt-2 text-sm text-slate-600">A list of all the NEW START health principles currently in the database.</p>
-    </div>
-    <div class="mt-4 sm:mt-0">
-        <a href="{{ route('admin.principles.create') }}" class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
-            Add Principle
-        </a>
+        <p class="mt-2 text-sm text-slate-600">Click a principle to modify its lessons and quiz questions.</p>
     </div>
 </div>
 
-<div class="bg-white shadow-sm ring-1 ring-slate-200 rounded-lg overflow-hidden">
-    <table class="min-w-full divide-y divide-slate-200">
-        <thead class="bg-slate-50">
-            <tr>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Principle Name</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Content Summary</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Actions</th>
-            </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-slate-200">
-            @foreach($principles as $principle)
-            <tr class="hover:bg-slate-50 transition">
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="flex items-center">
-                        <div class="h-10 w-10 flex-shrink-0 bg-indigo-100 rounded-full flex items-center justify-center">
-                            <span class="text-indigo-700 font-bold">{{ substr($principle->name, 0, 1) }}</span>
-                        </div>
-                        <div class="ml-4">
-                            <div class="text-sm font-semibold text-slate-900">{{ $principle->name }}</div>
-                        </div>
-                    </div>
-                </td>
-                <td class="px-6 py-4">
-                    <div class="flex flex-col space-y-1">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 w-fit">
-                            {{ $principle->lessons_count }} Lessons
-                        </span>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 w-fit">
-                            {{ $principle->quizzes_count }} Quizzes
-                        </span>
-                    </div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <a href="{{ route('admin.principles.show', $principle) }}" class="text-indigo-600 hover:text-indigo-900 font-semibold">View Details</a>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    @foreach($principles as $principle)
+    <div class="bg-white rounded-xl shadow-sm ring-1 ring-slate-200 overflow-hidden hover:shadow-md transition group">
+        <div class="p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div class="h-12 w-12 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-700 font-bold text-xl group-hover:bg-indigo-600 group-hover:text-white transition">
+                    {{ substr($principle->name, 0, 1) }}
+                </div>
+                <div class="flex space-x-2">
+                    <a href="{{ route('admin.principles.edit', $principle) }}" class="p-2 text-slate-400 hover:text-indigo-600 transition" title="Edit Principle">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                    </a>
+                </div>
+            </div>
+            
+            <h3 class="text-xl font-bold text-slate-900 mb-2">{{ $principle->name }}</h3>
+            
+            <div class="flex items-center space-x-4 mb-6 text-sm">
+                <span class="text-slate-500"><span class="font-bold text-slate-900">{{ $principle->lessons_count }}</span> Lessons</span>
+                <span class="text-slate-500"><span class="font-bold text-slate-900">{{ $principle->quizzes_count }}</span> Quizzes</span>
+            </div>
+
+            <a href="{{ route('admin.principles.show', $principle) }}" class="block w-full text-center py-2 px-4 rounded-lg bg-slate-100 text-slate-700 font-bold hover:bg-indigo-600 hover:text-white transition">
+                Manage Content
+            </a>
+        </div>
+    </div>
+    @endforeach
 </div>
 @endsection
