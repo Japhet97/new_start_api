@@ -1,79 +1,75 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="mb-6">
-    <a href="{{ route('admin.principles.index') }}" class="text-blue-600 hover:underline">&larr; Back to Principles</a>
-    <h1 class="text-3xl font-bold text-gray-800 mt-2">Manage: {{ $principle->name }}</h1>
-</div>
-
-<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-    <!-- Lessons Section -->
-    <div>
-        <h2 class="text-2xl font-bold text-gray-700 mb-4">Lessons</h2>
-        @foreach($principle->lessons as $lesson)
-            <div class="bg-white p-4 rounded shadow mb-3">
-                <h3 class="font-bold">{{ $lesson->title }}</h3>
-                <p class="text-sm text-gray-600 truncate">{{ $lesson->content }}</p>
-            </div>
-        @endforeach
-
-        <div class="bg-gray-200 p-6 rounded-lg mt-4">
-            <h3 class="font-bold mb-4">Add Lesson</h3>
-            <form action="{{ route('admin.principles.addLesson', $principle) }}" method="POST">
-                @csrf
-                <div class="mb-3">
-                    <input type="text" name="title" placeholder="Lesson Title" class="w-full border rounded px-3 py-2" required>
-                </div>
-                <div class="mb-3">
-                    <textarea name="content" placeholder="Content" class="w-full border rounded px-3 py-2 h-24" required></textarea>
-                </div>
-                <div class="mb-3">
-                    <textarea name="benefits" placeholder="Benefits (Optional)" class="w-full border rounded px-3 py-2"></textarea>
-                </div>
-                <div class="mb-3">
-                    <input type="text" name="bible_verse" placeholder="Bible Verse (Optional)" class="w-full border rounded px-3 py-2">
-                </div>
-                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full">Add Lesson</button>
-            </form>
+<div class="max-w-4xl mx-auto">
+    <div class="mb-8">
+        <a href="{{ route('admin.principles.index') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">&larr; Back to Dashboard</a>
+        <div class="flex items-center justify-between mt-2">
+            <h1 class="text-3xl font-bold text-slate-900">{{ $principle->name }}</h1>
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
+                Principle ID: {{ $principle->id }}
+            </span>
         </div>
     </div>
 
-    <!-- Quizzes Section -->
-    <div>
-        <h2 class="text-2xl font-bold text-gray-700 mb-4">Quizzes</h2>
-        @foreach($principle->quizzes as $quiz)
-            <div class="bg-white p-4 rounded shadow mb-3">
-                <p class="font-bold">{{ $quiz->question }}</p>
-                <p class="text-sm text-green-600">Correct: {{ $quiz->correct_answer }}</p>
+    <div class="space-y-12">
+        <!-- Lessons Section -->
+        <section>
+            <div class="flex items-center justify-between mb-6 border-b border-slate-200 pb-4">
+                <h2 class="text-2xl font-bold text-slate-800">Lessons</h2>
+                <a href="{{ route('admin.lessons.create', ['principle_id' => $principle->id]) }}" class="text-sm font-bold text-indigo-600 hover:text-indigo-500 underline">+ Add Lesson</a>
             </div>
-        @endforeach
+            
+            @if($principle->lessons->isEmpty())
+                <div class="bg-white rounded-lg border-2 border-dashed border-slate-300 p-8 text-center text-slate-500">
+                    No lessons added yet for this principle.
+                </div>
+            @else
+                <div class="grid gap-6">
+                    @foreach($principle->lessons as $lesson)
+                        <div class="bg-white p-6 rounded-xl shadow-sm ring-1 ring-slate-200">
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">{{ $lesson->title }}</h3>
+                            <p class="text-slate-600 line-clamp-3 mb-4">{{ $lesson->content }}</p>
+                            @if($lesson->bible_verse)
+                                <div class="text-sm font-medium text-indigo-600 italic">"{{ $lesson->bible_verse }}"</div>
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </section>
 
-        <div class="bg-gray-200 p-6 rounded-lg mt-4">
-            <h3 class="font-bold mb-4">Add Quiz</h3>
-            <form action="{{ route('admin.principles.addQuiz', $principle) }}" method="POST">
-                @csrf
-                <div class="mb-3">
-                    <input type="text" name="question" placeholder="Question" class="w-full border rounded px-3 py-2" required>
-                </div>
-                <div class="mb-3">
-                    <input type="text" name="correct_answer" placeholder="Correct Answer (e.g. A)" class="w-full border rounded px-3 py-2" required maxlength="1">
-                </div>
-                
-                <h4 class="font-bold text-sm mb-2 uppercase">Options</h4>
-                <div class="grid grid-cols-2 gap-2 mb-3">
-                    <div>
-                        <input type="hidden" name="options[0][label]" value="A">
-                        <input type="text" name="options[0][text]" placeholder="Option A text" class="w-full border rounded px-2 py-1 text-sm" required>
-                    </div>
-                    <div>
-                        <input type="hidden" name="options[1][label]" value="B">
-                        <input type="text" name="options[1][text]" placeholder="Option B text" class="w-full border rounded px-2 py-1 text-sm" required>
-                    </div>
-                </div>
+        <!-- Quizzes Section -->
+        <section>
+            <div class="flex items-center justify-between mb-6 border-b border-slate-200 pb-4">
+                <h2 class="text-2xl font-bold text-slate-800">Quizzes</h2>
+                <a href="{{ route('admin.quizzes.create', ['principle_id' => $principle->id]) }}" class="text-sm font-bold text-indigo-600 hover:text-indigo-500 underline">+ Add Quiz</a>
+            </div>
 
-                <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 w-full">Add Quiz</button>
-            </form>
-        </div>
+            @if($principle->quizzes->isEmpty())
+                <div class="bg-white rounded-lg border-2 border-dashed border-slate-300 p-8 text-center text-slate-500">
+                    No quiz questions added yet for this principle.
+                </div>
+            @else
+                <div class="grid gap-6">
+                    @foreach($principle->quizzes as $quiz)
+                        <div class="bg-white p-6 rounded-xl shadow-sm ring-1 ring-slate-200">
+                            <div class="flex justify-between items-start mb-4">
+                                <p class="text-lg font-semibold text-slate-900">{{ $quiz->question }}</p>
+                                <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-1 rounded">Correct: {{ $quiz->correct_answer }}</span>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                @foreach($quiz->options as $option)
+                                    <div class="p-3 rounded-lg border @if($quiz->correct_answer == $option->option_label) border-emerald-500 bg-emerald-50 @else border-slate-200 bg-slate-50 @endif text-sm">
+                                        <span class="font-bold text-slate-500 mr-2">{{ $option->option_label }}.</span> {{ $option->option_text }}
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </section>
     </div>
 </div>
 @endsection
