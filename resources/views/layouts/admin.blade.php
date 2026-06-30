@@ -19,6 +19,7 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <a href="{{ route('admin.principles.index') }}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-600 transition">Principles</a>
+                    <a href="{{ route('admin.notifications.index') }}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-600 transition text-amber-200 font-bold">Send Push</a>
                     <a href="{{ route('admin.lessons.create') }}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-600 transition">Add Lesson</a>
                     <a href="{{ route('admin.quizzes.create') }}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-600 transition">Add Quiz</a>
                 </div>
